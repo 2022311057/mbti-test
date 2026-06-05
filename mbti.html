@@ -374,10 +374,6 @@ body{
     </div>
     <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
   </div>
-  <div class="func-row">
-    <span class="ftag" id="ftag">Ne</span>
-    <span class="func-jp" id="findic">外向的直感</span>
-  </div>
   <div class="qtext" id="qtext"></div>
   <div class="answers" id="answers"></div>
 </div>
@@ -541,13 +537,13 @@ const QUESTIONS = [
   {f:7,t:'自分らしさや真正性（本物であること・偽らないこと）を人生で最も大切にしている。'},
 ];
 
-const ALBL = ['全く違う','あまり違う','どちらでもない','やや当てはまる','とても当てはまる'];
+const ALBL = ['とても当てはまる','やや当てはまる','どちらでもない','あまり違う','全く違う'];
 const ADOT_STYLE = [
-  {bg:'#f1f5f9',c:'#94a3b8'},
-  {bg:'#e2e8f0',c:'#64748b'},
-  {bg:'#fce7f3',c:'#db2777'},
-  {bg:'#ede9fe',c:'#7c3aed'},
   {bg:'#ddd6fe',c:'#6d28d9'},
+  {bg:'#ede9fe',c:'#7c3aed'},
+  {bg:'#fce7f3',c:'#db2777'},
+  {bg:'#e2e8f0',c:'#64748b'},
+  {bg:'#f1f5f9',c:'#94a3b8'},
 ];
 
 const tColor = t =>
@@ -692,7 +688,7 @@ function softmax(arr, T=0.10){
 
 function calculate(){
   const fs = new Array(8).fill(0), fc = new Array(8).fill(0);
-  QUESTIONS.forEach((q,i) => { fs[q.f] += (answers[i]-1)/4; fc[q.f]++; });
+  QUESTIONS.forEach((q,i) => { fs[q.f] += (5-answers[i])/4; fc[q.f]++; });
   const uv = fs.map((s,i) => fc[i] ? s/fc[i] : 0);
   const types = Object.keys(IDEAL);
   const sims = types.map(t => cosSim(uv, IDEAL[t]));
