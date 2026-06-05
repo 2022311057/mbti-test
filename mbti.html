@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MBTI 割合診断</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --pink:#ec4899;
+  --pink-d:#db2777;
+  --purple:#9333ea;
+  --purple-l:#ede9fe;
+  --rose-l:#fce7f3;
+  --txt:#1e1533;
+  --txt2:#6b5b7b;
+  --txt3:#a89db8;
+  --card:#fff;
+  --sh:0 4px 32px rgba(219,39,119,.09),0 1px 6px rgba(0,0,0,.05);
+  --r:20px;
+}
+body{
+  font-family:'Noto Sans JP',-apple-system,'Hiragino Kaku Gothic ProN',sans-serif;
+  background:linear-gradient(160deg,#fff5f9 0%,#fdf4ff 55%,#f0f4ff 100%);
+  background-attachment:fixed;
+  color:var(--txt);
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+}
+.screen{
+  position:fixed;inset:0;
+  display:flex;align-items:flex-start;justify-content:center;
+  opacity:0;pointer-events:none;
+  transition:opacity .4s ease;
+  overflow-y:auto;
+  padding:24px 16px 64px;
+}
+.screen.active{opacity:1;pointer-events:all}
+.card{
+  background:var(--card);
+  border-radius:var(--r);
+  box-shadow:var(--sh);
+  padding:28px 22px;
+  width:100%;max-width:600px;
+  margin:auto;
+}
+
+/* ===== WELCOME ===== */
+.welcome-eyebrow{
+  display:inline-flex;align-items:center;gap:6px;
+  background:linear-gradient(135deg,#fce7f3,#ede9fe);
+  color:#7c3aed;border-radius:30px;
+  padding:6px 16px;font-size:.78rem;font-weight:700;
+  margin-bottom:20px;letter-spacing:.04em;
+}
+.welcome-h1{
+  font-size:2.4rem;font-weight:900;line-height:1.15;
+  margin-bottom:14px;
+}
+.welcome-h1 .grad{
+  background:linear-gradient(135deg,#db2777,#9333ea);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.welcome-sub{
+  font-size:.92rem;color:var(--txt2);line-height:1.85;margin-bottom:20px;
+}
+.chips-label{
+  font-size:.7rem;font-weight:800;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px;
+}
+
+/* type chips */
+.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
+.chip{
+  display:inline-flex;align-items:center;gap:4px;
+  padding:6px 13px;border-radius:30px;
+  font-size:.78rem;font-weight:700;
+  cursor:default;transition:transform .15s;
+}
+.chip:hover{transform:scale(1.05)}
+
+/* features */
+.feat-list{display:flex;flex-direction:column;gap:10px;margin-bottom:26px}
+.feat{
+  display:flex;align-items:center;gap:14px;
+  padding:14px 18px;
+  background:linear-gradient(135deg,#fff5f9,#fdf4ff);
+  border-radius:14px;border:1px solid #fce7f3;
+}
+.feat .ic{font-size:1.4rem;flex-shrink:0}
+.feat-body h3{font-size:.88rem;font-weight:700;margin-bottom:2px}
+.feat-body p{font-size:.78rem;color:var(--txt2);line-height:1.5}
+
+/* CTA button */
+.btn-cta{
+  width:100%;padding:16px;border-radius:14px;border:none;
+  cursor:pointer;font-family:inherit;font-size:1rem;font-weight:700;
+  background:linear-gradient(135deg,#ec4899,#9333ea);
+  color:#fff;
+  box-shadow:0 8px 24px rgba(219,39,119,.28);
+  transition:all .2s;
+}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(219,39,119,.38)}
+.btn-cta:active{transform:translateY(0)}
+.btn-sec{
+  width:100%;padding:14px;border-radius:14px;border:2px solid #ede9fe;
+  cursor:pointer;font-family:inherit;font-size:.95rem;font-weight:700;
+  background:#fdf4ff;color:#7c3aed;
+  transition:all .2s;margin-top:12px;
+}
+.btn-sec:hover{background:#f3e8ff}
+
+/* ===== DEMO PREVIEW CARD ===== */
+.preview-card{
+  background:linear-gradient(135deg,#fff5f9 0%,#fdf4ff 100%);
+  border:1.5px solid #fce7f3;border-radius:18px;
+  padding:18px 16px;
+}
+.preview-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:12px;
+}
+.preview-title{
+  font-size:.7rem;font-weight:800;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.1em;
+}
+.sample-badge{
+  background:#ede9fe;color:#7c3aed;
+  font-size:.65rem;font-weight:700;
+  padding:3px 9px;border-radius:20px;letter-spacing:.02em;
+}
+.preview-hero-row{
+  display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
+}
+.preview-type-big{
+  font-size:2rem;font-weight:900;letter-spacing:.1em;
+  background:linear-gradient(135deg,#db2777,#7c3aed);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.preview-pct-big{font-size:1.15rem;font-weight:900;color:#9333ea;}
+.preview-name-sm{font-size:.78rem;color:var(--txt2);font-weight:600;margin-left:auto;}
+.preview-radar-wrap{display:flex;justify-content:center;margin-bottom:14px;}
+
+/* preview bars */
+.prow{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
+.plabel{width:68px;font-size:.74rem;font-weight:700;color:var(--txt);flex-shrink:0;}
+.pbar-w{flex:1;background:#f3e8ff;border-radius:3px;height:14px;overflow:hidden;}
+.pbar{height:100%;border-radius:3px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.ppct{width:36px;text-align:right;font-size:.7rem;color:var(--txt3);font-weight:500;flex-shrink:0;}
+
+/* mobile vs pc preview */
+.preview-mobile{
+  background:linear-gradient(135deg,#fff5f9,#fdf4ff);
+  border:1.5px solid #fce7f3;border-radius:14px;
+  padding:14px 16px;margin-bottom:22px;
+}
+.preview-pc{display:none;}
+
+/* ===== QUIZ ===== */
+.prog-wrap{margin-bottom:22px}
+.prog-meta{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--txt3);margin-bottom:8px}
+.prog-bar{height:7px;background:#fce7f3;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#f472b6,#9333ea);border-radius:4px;transition:width .45s cubic-bezier(.4,0,.2,1);}
+.func-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
+.ftag{display:inline-block;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;background:#fce7f3;color:#db2777;letter-spacing:.04em;}
+.func-jp{font-size:.78rem;color:var(--txt3);font-weight:500}
+.qtext{font-size:1.05rem;line-height:1.9;color:var(--txt);font-weight:500;margin-bottom:24px;min-height:66px;}
+.answers{display:flex;flex-direction:column;gap:8px}
+.abtn{
+  display:flex;align-items:center;gap:13px;padding:13px 18px;
+  background:#fff;border:2px solid #f3e8ff;border-radius:14px;
+  cursor:pointer;font-family:inherit;font-size:.9rem;font-weight:500;
+  color:var(--txt);text-align:left;width:100%;transition:all .15s;
+}
+.abtn:hover{background:#fdf4ff;border-color:#c084fc;transform:translateX(5px)}
+.adot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;}
+
+/* ===== LOADING ===== */
+.pulse-emoji{font-size:3rem;display:block;text-align:center;margin-bottom:8px;animation:pulse 1.2s ease-in-out infinite;}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+.spinner{width:52px;height:52px;border:4px solid #fce7f3;border-top-color:var(--pink);border-radius:50%;animation:spin 1s linear infinite;margin:16px auto 20px;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ===== RESULT ===== */
+.res-hero{
+  text-align:center;padding:28px 20px;
+  background:linear-gradient(135deg,#fff5f9 0%,#fdf4ff 100%);
+  border-radius:18px;margin-bottom:22px;border:1.5px solid #fce7f3;
+  position:relative;overflow:hidden;
+}
+.res-hero::after{content:'✨';position:absolute;top:12px;right:16px;font-size:1.2rem;opacity:.5;}
+.res-eyebrow{font-size:.75rem;font-weight:700;color:#db2777;letter-spacing:.1em;margin-bottom:10px}
+.res-type{font-size:4rem;font-weight:900;letter-spacing:.12em;background:linear-gradient(135deg,#db2777,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.res-pct{font-size:1.9rem;font-weight:900;color:#9333ea;margin:4px 0 8px;}
+.res-name{font-size:1.1rem;font-weight:700;color:var(--txt);margin-bottom:10px}
+.res-desc{font-size:.85rem;color:var(--txt2);line-height:1.85;max-width:420px;margin:0 auto}
+.sec-label{
+  font-size:.72rem;font-weight:800;color:var(--txt3);
+  text-transform:uppercase;letter-spacing:.12em;
+  margin:22px 0 12px;display:flex;align-items:center;gap:8px;
+}
+.sec-label::after{content:'';flex:1;height:1px;background:#f3e8ff}
+.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
+.tcard{background:#fff;border:2px solid #f3e8ff;border-radius:16px;padding:16px 12px;text-align:center;transition:border-color .2s;}
+.tcard:hover{border-color:#c084fc}
+.tc-type{font-size:1.15rem;font-weight:900;margin-bottom:3px}
+.tc-pct{font-size:.82rem;color:#9333ea;font-weight:700;margin-bottom:7px}
+.tc-name{font-size:.78rem;font-weight:700;color:var(--txt);margin-bottom:4px}
+.tc-desc{font-size:.72rem;color:var(--txt2);line-height:1.6}
+.type-list{display:flex;flex-direction:column;gap:7px}
+.trow{display:flex;align-items:center;gap:9px}
+.tlabel{width:50px;font-size:.82rem;font-weight:700;color:var(--txt);flex-shrink:0}
+.tbar-w{flex:1;background:#f3e8ff;border-radius:4px;height:20px;overflow:hidden}
+.tbar{height:100%;border-radius:4px;transition:width 1.3s cubic-bezier(.4,0,.2,1);display:flex;align-items:center;padding-left:7px;font-size:.68rem;font-weight:700;color:#fff;min-width:0;}
+.tpct{width:44px;text-align:right;font-size:.78rem;color:var(--txt3);flex-shrink:0;font-weight:500}
+.func-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.frow{display:flex;flex-direction:column;gap:5px}
+.fmeta{display:flex;justify-content:space-between;font-size:.8rem}
+.fname{font-weight:700;color:var(--txt)}
+.fjp{color:var(--txt3);font-size:.7rem;font-weight:500}
+.fscore{color:#9333ea;font-weight:700}
+.fbar-bg{background:#f3e8ff;border-radius:3px;height:6px;overflow:hidden}
+.fbar{height:100%;border-radius:3px;background:linear-gradient(90deg,#f472b6,#9333ea);transition:width 1s ease;}
+.radar-wrap{display:flex;justify-content:center;margin:8px 0}
+
+/* =====================================================
+   MOBILE overrides (≤580px)
+   ===================================================== */
+@media(max-width:580px){
+  .card{padding:22px 16px}
+  .welcome-h1{font-size:1.9rem}
+  .top3{grid-template-columns:1fr}
+  .func-grid{grid-template-columns:1fr}
+  .res-type{font-size:3rem}
+}
+
+/* =====================================================
+   PC LAYOUT (≥768px)
+   ===================================================== */
+@media(min-width:768px){
+  .screen{padding:48px 40px 80px}
+
+  /* Welcome */
+  .welcome-card{max-width:980px}
+  .welcome-card .card{padding:52px 56px;max-width:980px}
+  .welcome-cols{display:flex;gap:48px;align-items:flex-start}
+  .welcome-left{flex:1.1;min-width:0}
+  .welcome-right{flex:1;min-width:0}
+  .welcome-h1{font-size:3rem}
+  .welcome-sub{font-size:.97rem}
+
+  /* Preview visibility */
+  .preview-mobile{display:none}
+  .preview-pc{display:block;margin-bottom:16px}
+
+  /* Quiz */
+  .quiz-card{max-width:620px}
+  .quiz-card .card{padding:44px 48px;max-width:620px}
+  .qtext{font-size:1.1rem}
+
+  /* Loading */
+  .load-card{max-width:440px}
+  .load-card .card{padding:60px 48px;max-width:440px}
+
+  /* Result */
+  .result-card{max-width:1000px}
+  .result-card .card{padding:48px 52px;max-width:1000px}
+  .res-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+  .res-col-right .func-grid{grid-template-columns:1fr}
+  .res-col-right .radar-wrap svg{width:220px;height:220px}
+  .top3{grid-template-columns:repeat(3,1fr)}
+  .res-type{font-size:4.8rem}
+  .res-hero{padding:36px 32px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== WELCOME ===== -->
+<div id="welcome" class="screen active">
+<div class="welcome-card" style="width:100%;display:flex;justify-content:center;margin:auto">
+<div class="card" style="width:100%">
+  <div class="welcome-cols">
+
+    <!-- ===== LEFT: text + features + CTA ===== -->
+    <div class="welcome-left">
+      <div class="welcome-eyebrow">✨ MBTI 割合診断</div>
+      <div class="welcome-h1">
+        あなたの個性を<br>
+        <span class="grad">割合で診断しよう</span>
+      </div>
+      <div class="welcome-sub">
+        直感で答えるだけで、あなたの性格が<br>
+        16タイプの割合として可視化されます。<br>
+        難しいことは考えなくてOK。
+      </div>
+
+      <!-- Mobile-only: compact preview bars -->
+      <div class="preview-mobile">
+        <div class="preview-header">
+          <span class="preview-title">診断結果イメージ</span>
+          <span class="sample-badge">サンプル</span>
+        </div>
+        <div id="demo-bars-mobile"></div>
+      </div>
+
+      <div class="feat-list">
+        <div class="feat">
+          <div class="ic">📊</div>
+          <div class="feat-body">
+            <h3>16タイプを「割合」で診断</h3>
+            <p>単純な1タイプ判定ではなく、あなたの個性を確率分布で表示</p>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="ic">⏱️</div>
+          <div class="feat-body">
+            <h3>32問・約5分でOK</h3>
+            <p>直感的に答えるだけ。難しいことは考えなくて大丈夫</p>
+          </div>
+        </div>
+        <div class="feat">
+          <div class="ic">🌸</div>
+          <div class="feat-body">
+            <h3>あなたらしさを発見</h3>
+            <p>8つの心理的な強みも分析。本当の自分をもっと知ろう</p>
+          </div>
+        </div>
+      </div>
+
+      <button class="btn-cta" onclick="startQuiz()">割合診断スタート ✨</button>
+    </div>
+
+    <!-- ===== RIGHT: PC preview card + chips ===== -->
+    <div class="welcome-right">
+
+      <!-- PC-only: full preview (radar + bars) -->
+      <div class="preview-pc">
+        <div class="preview-card">
+          <div class="preview-header">
+            <span class="preview-title">診断結果イメージ</span>
+            <span class="sample-badge">サンプル</span>
+          </div>
+          <div class="preview-hero-row">
+            <span class="preview-type-big">💜 INFJ</span>
+            <span class="preview-pct-big">45.2%</span>
+            <span class="preview-name-sm">提唱者</span>
+          </div>
+          <div class="preview-radar-wrap">
+            <svg id="demo-radar" width="200" height="200" viewBox="0 0 200 200"></svg>
+          </div>
+          <div id="demo-bars-pc"></div>
+        </div>
+      </div>
+
+      <div class="chips-label">16の性格タイプ</div>
+      <div class="chips" id="chips"></div>
+    </div>
+
+  </div>
+</div>
+</div>
+</div>
+
+<!-- ===== QUIZ ===== -->
+<div id="quiz" class="screen">
+<div class="quiz-card" style="width:100%;display:flex;justify-content:center;margin:auto">
+<div class="card" style="width:100%">
+  <div class="prog-wrap">
+    <div class="prog-meta">
+      <span id="qcounter">質問 1 / 32</span>
+      <span id="qpct">0%</span>
+    </div>
+    <div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%"></div></div>
+  </div>
+  <div class="func-row">
+    <span class="ftag" id="ftag">Ne</span>
+    <span class="func-jp" id="findic">外向的直感</span>
+  </div>
+  <div class="qtext" id="qtext"></div>
+  <div class="answers" id="answers"></div>
+</div>
+</div>
+</div>
+
+<!-- ===== LOADING ===== -->
+<div id="loading" class="screen">
+<div class="load-card" style="width:100%;display:flex;justify-content:center;margin:auto">
+<div class="card" style="text-align:center;width:100%">
+  <span class="pulse-emoji">🌸</span>
+  <div class="spinner"></div>
+  <div style="font-size:1.05rem;font-weight:700;color:var(--txt);margin-bottom:8px">MBTI割合を計算中...</div>
+  <div style="font-size:.85rem;color:var(--txt2);line-height:1.8">あなたの回答を分析して<br>16タイプの割合を算出しています</div>
+</div>
+</div>
+</div>
+
+<!-- ===== RESULT ===== -->
+<div id="result" class="screen">
+<div class="result-card" style="width:100%;display:flex;justify-content:center;margin:auto">
+<div class="card" style="width:100%">
+  <div style="text-align:center;margin-bottom:20px;font-size:1.05rem;font-weight:700;color:var(--txt)">MBTI 割合診断 結果 🎉</div>
+
+  <div class="res-hero">
+    <div class="res-eyebrow">あなたのタイプ</div>
+    <div class="res-type" id="r-type"></div>
+    <div class="res-pct" id="r-pct"></div>
+    <div class="res-name" id="r-name"></div>
+    <div class="res-desc" id="r-desc"></div>
+  </div>
+
+  <div class="sec-label">TOP 3 タイプ</div>
+  <div class="top3" id="top3"></div>
+
+  <div class="res-cols">
+    <div class="res-col-left">
+      <div class="sec-label">全16タイプ 割合分布</div>
+      <div class="type-list" id="typelist"></div>
+    </div>
+    <div class="res-col-right">
+      <div class="sec-label" style="justify-content:center">認知機能レーダー</div>
+      <div class="radar-wrap">
+        <svg id="radar" width="260" height="260" viewBox="0 0 260 260"></svg>
+      </div>
+      <div class="sec-label">認知機能スコア</div>
+      <div class="func-grid" id="funcgrid"></div>
+    </div>
+  </div>
+
+  <button class="btn-sec" onclick="resetQuiz()">もう一度診断する</button>
+</div>
+</div>
+</div>
+
+<script>
+const FN = ['Ne','Ni','Se','Si','Te','Ti','Fe','Fi'];
+const FNJP = {Ne:'外向的直感',Ni:'内向的直感',Se:'外向的感覚',Si:'内向的感覚',Te:'外向的思考',Ti:'内向的思考',Fe:'外向的感情',Fi:'内向的感情'};
+
+const CHIP_DATA = [
+  {t:'INFJ',e:'💜',bg:'#ede9fe',tc:'#7c3aed'},
+  {t:'INFP',e:'🌸',bg:'#fce7f3',tc:'#db2777'},
+  {t:'ENFJ',e:'🌟',bg:'#d1fae5',tc:'#047857'},
+  {t:'ENFP',e:'🦋',bg:'#fef3c7',tc:'#b45309'},
+  {t:'INTJ',e:'⚡',bg:'#e0e7ff',tc:'#4338ca'},
+  {t:'INTP',e:'🔮',bg:'#ede9fe',tc:'#6d28d9'},
+  {t:'ENTJ',e:'🏆',bg:'#fce7f3',tc:'#be185d'},
+  {t:'ENTP',e:'💡',bg:'#fef9c3',tc:'#92400e'},
+  {t:'ISTJ',e:'📚',bg:'#dbeafe',tc:'#1d4ed8'},
+  {t:'ISFJ',e:'🌿',bg:'#dcfce7',tc:'#15803d'},
+  {t:'ESTJ',e:'🎯',bg:'#ffedd5',tc:'#c2410c'},
+  {t:'ESFJ',e:'🤝',bg:'#fce7f3',tc:'#be185d'},
+  {t:'ISTP',e:'🔧',bg:'#f1f5f9',tc:'#475569'},
+  {t:'ISFP',e:'🎨',bg:'#fff1f2',tc:'#e11d48'},
+  {t:'ESTP',e:'🔥',bg:'#fff7ed',tc:'#c2410c'},
+  {t:'ESFP',e:'🎭',bg:'#fef9c3',tc:'#a16207'},
+];
+
+// Demo data for welcome screen preview (INFJ-leaning sample)
+// [Ne, Ni, Se, Si, Te, Ti, Fe, Fi]
+const DEMO_SCORES = [0.45, 0.85, 0.15, 0.28, 0.10, 0.52, 0.80, 0.62];
+const DEMO_BARS = [
+  {type:'INFJ', e:'💜', pct:45.2, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
+  {type:'INFP', e:'🌸', pct:28.1, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
+  {type:'ENFJ', e:'🌟', pct:15.3, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
+  {type:'ENFP', e:'🦋', pct: 8.1, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
+  {type:'INTJ', e:'⚡', pct: 3.3, grad:'linear-gradient(90deg,#c084fc,#7c3aed)'},
+];
+
+// Ideal vectors: [Ne, Ni, Se, Si, Te, Ti, Fe, Fi]
+const IDEAL = {
+  INTJ:[0.05,1.00,0.20,0.05,0.70,0.05,0.05,0.40],
+  INTP:[0.70,0.05,0.05,0.40,0.05,1.00,0.20,0.05],
+  ENTJ:[0.05,0.70,0.40,0.05,1.00,0.05,0.05,0.20],
+  ENTP:[1.00,0.05,0.05,0.20,0.05,0.70,0.40,0.05],
+  INFJ:[0.05,1.00,0.20,0.05,0.05,0.40,0.70,0.05],
+  INFP:[0.70,0.05,0.05,0.40,0.20,0.05,0.05,1.00],
+  ENFJ:[0.05,0.70,0.40,0.05,0.05,0.20,1.00,0.05],
+  ENFP:[1.00,0.05,0.05,0.20,0.40,0.05,0.05,0.70],
+  ISTJ:[0.20,0.05,0.05,1.00,0.70,0.05,0.05,0.40],
+  ISFJ:[0.20,0.05,0.05,1.00,0.05,0.40,0.70,0.05],
+  ESTJ:[0.40,0.05,0.05,0.70,1.00,0.05,0.05,0.20],
+  ESFJ:[0.40,0.05,0.05,0.70,0.05,0.20,1.00,0.05],
+  ISTP:[0.05,0.40,0.70,0.05,0.05,1.00,0.20,0.05],
+  ISFP:[0.05,0.40,0.70,0.05,0.20,0.05,0.05,1.00],
+  ESTP:[0.05,0.20,1.00,0.05,0.05,0.70,0.40,0.05],
+  ESFP:[0.05,0.20,1.00,0.05,0.40,0.05,0.05,0.70],
+};
+
+const TINFO = {
+  INTJ:{n:'建築家',d:'独創的な戦略家。遠大なビジョンと緻密な計画で目標を追求する。独立した思考と高い自律性が特徴。'},
+  INTP:{n:'論理学者',d:'理論と分析を愛する探求者。物事の仕組みを徹底的に理解しようとし、独自の論理体系を構築する。'},
+  ENTJ:{n:'指揮官',d:'生まれながらのリーダー。論理と効率で組織を動かし、大きな目標を実現する強い意志を持つ。'},
+  ENTP:{n:'討論者',d:'革新的なアイデアで既成概念に挑む探求者。知的な議論と可能性の発見に喜びを見出す。'},
+  INFJ:{n:'提唱者',d:'深い洞察と強い信念を持つビジョナリー。静かながら強力な変化をもたらす理想主義者。'},
+  INFP:{n:'仲介者',d:'理想と真正性を追求する詩人。深い感受性と豊かな内面世界を持ち、人の可能性を信じる。'},
+  ENFJ:{n:'主人公',d:'カリスマ的な教師。人々の成長を助けることに使命感を持ち、温かいリーダーシップで周囲を導く。'},
+  ENFP:{n:'広報運動家',d:'情熱的な啓発者。人とのつながりと無限の可能性に喜びを見出すエネルギー溢れる楽観主義者。'},
+  ISTJ:{n:'管理者',d:'信頼性と責任感の体現者。伝統と秩序を重んじ、着実な努力で義務を果たす実直な実務家。'},
+  ISFJ:{n:'擁護者',d:'献身的な守護者。温かく思いやりがあり、周囲の人々を陰で支える細やかな気配りの持ち主。'},
+  ESTJ:{n:'幹部',d:'秩序と効率の守護者。明確なルールと組織を大切にし、コミュニティをまとめる実践的なリーダー。'},
+  ESFJ:{n:'領事官',d:'社交的な調和者。人々の感情に敏感で、周囲が幸せでいられるよう献身的にケアする。'},
+  ISTP:{n:'巨匠',d:'実践的な問題解決者。論理と器用さで複雑な仕組みを解析し、冷静に行動する独立心旺盛なタイプ。'},
+  ISFP:{n:'冒険者',d:'感性豊かな芸術家。現在の美しさと個人の自由を大切にし、独自の価値観で静かに自己表現する。'},
+  ESTP:{n:'起業家',d:'エネルギッシュな行動家。機転が利き、現実的な解決策を即座に見つける刺激を愛するリアリスト。'},
+  ESFP:{n:'エンターテイナー',d:'生命力溢れる楽しみ屋。周囲に喜びと笑いをもたらし、今この瞬間を全力で生きるパフォーマー。'},
+};
+
+const QUESTIONS = [
+  {f:0,t:'新しいアイデアや可能性を探ることが好きで、ひとつのことより複数のことを同時に考えたい。'},
+  {f:0,t:'会話や読書中に、突然関連するアイデアが次々と浮かび、話が思わぬ方向へ広がっていく。'},
+  {f:0,t:'「もし〜だったら」という仮定の話や思考実験を楽しむ。'},
+  {f:0,t:'異なる分野のパターンや共通点を見つけ、それらを結びつけることに喜びを感じる。'},
+  {f:1,t:'うまく説明できないが、物事の本質や将来の方向性が直感的に「見える」感覚がある。'},
+  {f:1,t:'表面的な情報より、その裏にある深い意味・象徴・本質を読み取ろうとする。'},
+  {f:1,t:'ひとつのビジョンや考えを長時間深く追求し、収束した核心を見つけたいと思う。'},
+  {f:1,t:'夢や直感的なイメージ・比喩で物事を理解することが多い。'},
+  {f:2,t:'今この瞬間の体験（景色・音・味・触感）に完全に没頭できる。'},
+  {f:2,t:'考えるより先に行動することが多い（まずやってみて、後で考えるタイプ）。'},
+  {f:2,t:'美的センスや質感、細部の変化にすぐ気づき、こだわりがある。'},
+  {f:2,t:'スポーツ・ダンス・料理・手作業など、身体を使う活動が好きで得意だ。'},
+  {f:3,t:'過去の経験や前例を参考にして、現在の判断を下すことが多い。'},
+  {f:3,t:'決まったルーティンや手順があると安心し、急な変化には時間をかけて慣れる。'},
+  {f:3,t:'細かい事実・データ・手順を正確に記憶・記録することが得意だ。'},
+  {f:3,t:'伝統・慣例・実績ある方法を大切にし、それを守ろうとする傾向がある。'},
+  {f:4,t:'目標達成のための効率的な仕組み・計画・手順を作るのが好きで得意だ。'},
+  {f:4,t:'感情よりも客観的なデータや論理で意思決定するほうが良いと思う。'},
+  {f:4,t:'組織やプロジェクトをまとめ、具体的な成果を出すことに強いやりがいを感じる。'},
+  {f:4,t:'物事の無駄を省いて最適化・効率化することに達成感・満足感を覚える。'},
+  {f:5,t:'物事の仕組みや原理を徹底的に理解したいという強い内的欲求がある。'},
+  {f:5,t:'外部の権威よりも、自分の内的な論理体系や分析結果を信頼する。'},
+  {f:5,t:'矛盾や論理の欠陥をすぐに見つけ、正確さや一貫性に強くこだわる。'},
+  {f:5,t:'カテゴリーや定義を精密に整理・確定させてから話を進めたいと思う。'},
+  {f:6,t:'その場の雰囲気や人々の感情の流れを直感的に把握できる。'},
+  {f:6,t:'グループ全体が楽しんでいるか、誰も疎外されていないかが常に気になる。'},
+  {f:6,t:'他人の悩みや感情に共感し、自然と寄り添ったり力になろうとする。'},
+  {f:6,t:'集団の調和を保つことを優先して行動し、衝突や対立を避ける傾向がある。'},
+  {f:7,t:'自分の価値観や信念を非常に大切にし、それに反することはしたくない。'},
+  {f:7,t:'他人の評価より、自分の内なる基準・感覚・価値観で行動を判断する。'},
+  {f:7,t:'深い感情を内に秘めており、本当の気持ちは親しい人にしか見せない。'},
+  {f:7,t:'自分らしさや真正性（本物であること・偽らないこと）を人生で最も大切にしている。'},
+];
+
+const ALBL = ['全く違う','あまり違う','どちらでもない','やや当てはまる','とても当てはまる'];
+const ADOT_STYLE = [
+  {bg:'#f1f5f9',c:'#94a3b8'},
+  {bg:'#e2e8f0',c:'#64748b'},
+  {bg:'#fce7f3',c:'#db2777'},
+  {bg:'#ede9fe',c:'#7c3aed'},
+  {bg:'#ddd6fe',c:'#6d28d9'},
+];
+
+const tColor = t =>
+  ['INTJ','INTP','ENTJ','ENTP'].includes(t) ? '#7c3aed' :
+  ['INFJ','INFP','ENFJ','ENFP'].includes(t) ? '#059669' :
+  ['ISTJ','ISFJ','ESTJ','ESFJ'].includes(t) ? '#d97706' : '#e11d48';
+
+const tBarGrad = t =>
+  ['INTJ','INTP','ENTJ','ENTP'].includes(t) ? 'linear-gradient(90deg,#c084fc,#7c3aed)' :
+  ['INFJ','INFP','ENFJ','ENFP'].includes(t) ? 'linear-gradient(90deg,#6ee7b7,#059669)' :
+  ['ISTJ','ISFJ','ESTJ','ESFJ'].includes(t) ? 'linear-gradient(90deg,#fcd34d,#d97706)' :
+                                               'linear-gradient(90deg,#fda4af,#e11d48)';
+
+let curQ = 0, answers = [];
+
+// ===== Build chips =====
+(function(){
+  const el = document.getElementById('chips');
+  CHIP_DATA.forEach(({t,e,bg,tc}) => {
+    const span = document.createElement('span');
+    span.className = 'chip';
+    span.style.cssText = `background:${bg};color:${tc}`;
+    span.textContent = `${e} ${t}`;
+    el.appendChild(span);
+  });
+})();
+
+// ===== Demo preview (welcome screen) =====
+function buildDemoBars(containerId) {
+  const el = document.getElementById(containerId);
+  if (!el) return;
+  el.innerHTML = '';
+  DEMO_BARS.forEach(({type, e, pct, grad}) => {
+    el.innerHTML += `<div class="prow">
+      <span class="plabel">${e} ${type}</span>
+      <div class="pbar-w"><div class="pbar" id="pb-${containerId}-${type}" style="background:${grad}"></div></div>
+      <span class="ppct">${pct}%</span>
+    </div>`;
+  });
+  setTimeout(() => {
+    requestAnimationFrame(() => {
+      DEMO_BARS.forEach(({type, pct}) => {
+        const bar = document.getElementById(`pb-${containerId}-${type}`);
+        if (bar) bar.style.width = pct + '%';
+      });
+    });
+  }, 500);
+}
+
+function drawDemoRadar() {
+  const svg = document.getElementById('demo-radar');
+  if (!svg) return;
+  const cx = 100, cy = 100, r = 72, n = 8;
+  svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs) => {
+    const el = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  };
+  [.25,.5,.75,1].forEach(f =>
+    svg.appendChild(mk('circle',{cx,cy,r:r*f,fill:'none',stroke:'#f3e8ff','stroke-width':1.5}))
+  );
+  const angle = i => (i/n)*2*Math.PI - Math.PI/2;
+  for(let i=0;i<n;i++){
+    const a = angle(i);
+    svg.appendChild(mk('line',{x1:cx,y1:cy,x2:cx+r*Math.cos(a),y2:cy+r*Math.sin(a),stroke:'#e9d5ff','stroke-width':1.5}));
+    const lx=cx+(r+14)*Math.cos(a), ly=cy+(r+14)*Math.sin(a);
+    const t = mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':9,'font-weight':'700',fill:'#9333ea'});
+    t.textContent = FN[i];
+    svg.appendChild(t);
+  }
+  const pts = DEMO_SCORES.map((s,i) => {
+    const a = angle(i), d = r*s;
+    return [cx+d*Math.cos(a), cy+d*Math.sin(a)];
+  });
+  svg.appendChild(mk('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'rgba(236,72,153,0.18)',stroke:'#ec4899','stroke-width':2.5}));
+  pts.forEach(([px,py]) => svg.appendChild(mk('circle',{cx:px,cy:py,r:4,fill:'#ec4899'})));
+}
+
+// Initialize demo on page load
+(function(){
+  buildDemoBars('demo-bars-pc');
+  buildDemoBars('demo-bars-mobile');
+  drawDemoRadar();
+})();
+
+// ===== Screen navigation =====
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+function startQuiz(){curQ=0;answers=[];showScreen('quiz');renderQ();}
+function resetQuiz(){showScreen('welcome');}
+
+function renderQ(){
+  const q = QUESTIONS[curQ];
+  const pct = Math.round((curQ / QUESTIONS.length) * 100);
+  document.getElementById('qcounter').textContent = `質問 ${curQ+1} / ${QUESTIONS.length}`;
+  document.getElementById('qpct').textContent = `${pct}%`;
+  document.getElementById('ftag').textContent = FN[q.f];
+  document.getElementById('findic').textContent = FNJP[FN[q.f]];
+  document.getElementById('qtext').textContent = q.t;
+  document.getElementById('pfill').style.width = pct + '%';
+  const c = document.getElementById('answers');
+  c.innerHTML = '';
+  ALBL.forEach((lbl, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'abtn';
+    const {bg,c:col} = ADOT_STYLE[i];
+    btn.innerHTML = `<span class="adot" style="background:${bg};color:${col}">${i+1}</span>${lbl}`;
+    btn.onclick = () => handleAnswer(i + 1);
+    c.appendChild(btn);
+  });
+}
+
+function handleAnswer(v){
+  answers.push(v);
+  curQ++;
+  if(curQ >= QUESTIONS.length){
+    showScreen('loading');
+    setTimeout(() => { const r = calculate(); renderResults(r); showScreen('result'); }, 1600);
+  } else {
+    renderQ();
+  }
+}
+
+// ===== Algorithm =====
+function cosSim(a, b){
+  let dot=0, mA=0, mB=0;
+  for(let i=0;i<a.length;i++){dot+=a[i]*b[i];mA+=a[i]*a[i];mB+=b[i]*b[i];}
+  return (mA&&mB) ? dot/(Math.sqrt(mA)*Math.sqrt(mB)) : 0;
+}
+
+function softmax(arr, T=0.10){
+  const s = arr.map(x => x/T);
+  const mx = Math.max(...s);
+  const ex = s.map(x => Math.exp(x - mx));
+  const sum = ex.reduce((a,b) => a+b, 0);
+  return ex.map(x => x/sum);
+}
+
+function calculate(){
+  const fs = new Array(8).fill(0), fc = new Array(8).fill(0);
+  QUESTIONS.forEach((q,i) => { fs[q.f] += (answers[i]-1)/4; fc[q.f]++; });
+  const uv = fs.map((s,i) => fc[i] ? s/fc[i] : 0);
+  const types = Object.keys(IDEAL);
+  const sims = types.map(t => cosSim(uv, IDEAL[t]));
+  const probs = softmax(sims);
+  const typed = types.map((t,i) => ({type:t, prob:probs[i]}));
+  typed.sort((a,b) => b.prob - a.prob);
+  return {uv, typed};
+}
+
+// ===== Result rendering =====
+function renderResults({uv, typed}){
+  const top = typed[0], ti = TINFO[top.type];
+  document.getElementById('r-type').textContent = top.type;
+  document.getElementById('r-pct').textContent = (top.prob*100).toFixed(1) + '%';
+  document.getElementById('r-name').textContent = ti.n;
+  document.getElementById('r-desc').textContent = ti.d;
+
+  const t3 = document.getElementById('top3');
+  t3.innerHTML = '';
+  typed.slice(0,3).forEach(({type,prob}) => {
+    const col = tColor(type), inf = TINFO[type];
+    const ch = CHIP_DATA.find(x => x.t === type);
+    t3.innerHTML += `<div class="tcard" style="border-color:${col}33">
+      <div class="tc-type" style="color:${col}">${ch?ch.e+' ':''}${type}</div>
+      <div class="tc-pct">${(prob*100).toFixed(1)}%</div>
+      <div class="tc-name">${inf.n}</div>
+      <div class="tc-desc">${inf.d}</div>
+    </div>`;
+  });
+
+  const tl = document.getElementById('typelist');
+  tl.innerHTML = '';
+  typed.forEach(({type,prob}) => {
+    const grad = tBarGrad(type), pv = (prob*100).toFixed(1);
+    tl.innerHTML += `<div class="trow">
+      <span class="tlabel">${type}</span>
+      <div class="tbar-w"><div class="tbar" id="bar-${type}" style="width:0%;background:${grad}">${pv>7?pv+'%':''}</div></div>
+      <span class="tpct">${pv}%</span>
+    </div>`;
+  });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    typed.forEach(({type,prob}) => {
+      const el = document.getElementById('bar-'+type);
+      if(el) el.style.width = (prob*100).toFixed(2) + '%';
+    });
+  }));
+
+  const fg = document.getElementById('funcgrid');
+  fg.innerHTML = '';
+  FN.forEach((fn,i) => {
+    const s = uv[i];
+    fg.innerHTML += `<div class="frow">
+      <div class="fmeta">
+        <span><span class="fname">${fn}</span> <span class="fjp">${FNJP[fn]}</span></span>
+        <span class="fscore">${(s*100).toFixed(0)}%</span>
+      </div>
+      <div class="fbar-bg"><div class="fbar" id="fb-${fn}" style="width:0%"></div></div>
+    </div>`;
+  });
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    FN.forEach((fn,i) => {
+      const el = document.getElementById('fb-'+fn);
+      if(el) el.style.width = (uv[i]*100) + '%';
+    });
+  }));
+
+  drawRadar(uv);
+}
+
+function drawRadar(scores){
+  const svg = document.getElementById('radar');
+  const w = svg.clientWidth || 260;
+  const cx=w/2, cy=w/2, r=w*0.38, n=8;
+  svg.innerHTML = '';
+  const ns = 'http://www.w3.org/2000/svg';
+  const mk = (tag, attrs) => {
+    const el = document.createElementNS(ns, tag);
+    Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+    return el;
+  };
+  [.25,.5,.75,1].forEach(f =>
+    svg.appendChild(mk('circle',{cx,cy,r:r*f,fill:'none',stroke:'#f3e8ff','stroke-width':1.5}))
+  );
+  const angle = i => (i/n)*2*Math.PI - Math.PI/2;
+  for(let i=0;i<n;i++){
+    const a = angle(i);
+    const x2=cx+r*Math.cos(a), y2=cy+r*Math.sin(a);
+    svg.appendChild(mk('line',{x1:cx,y1:cy,x2,y2,stroke:'#e9d5ff','stroke-width':1.5}));
+    const lx=cx+(r+16)*Math.cos(a), ly=cy+(r+16)*Math.sin(a);
+    const t = mk('text',{x:lx,y:ly,'text-anchor':'middle','dominant-baseline':'middle','font-size':10,'font-weight':'700',fill:'#9333ea'});
+    t.textContent = FN[i];
+    svg.appendChild(t);
+  }
+  const pts = scores.map((s,i) => {
+    const a = angle(i), d = r*s;
+    return [cx+d*Math.cos(a), cy+d*Math.sin(a)];
+  });
+  svg.appendChild(mk('polygon',{points:pts.map(p=>p.join(',')).join(' '),fill:'rgba(236,72,153,0.15)',stroke:'#ec4899','stroke-width':2.5}));
+  pts.forEach(([px,py]) => svg.appendChild(mk('circle',{cx:px,cy:py,r:4.5,fill:'#ec4899'})));
+}
+</script>
+</body>
+</html>
