@@ -644,8 +644,6 @@ function renderQ(){
   const pct = Math.round((curQ / QUESTIONS.length) * 100);
   document.getElementById('qcounter').textContent = `質問 ${curQ+1} / ${QUESTIONS.length}`;
   document.getElementById('qpct').textContent = `${pct}%`;
-  document.getElementById('ftag').textContent = FN[q.f];
-  document.getElementById('findic').textContent = FNJP[FN[q.f]];
   document.getElementById('qtext').textContent = q.t;
   document.getElementById('pfill').style.width = pct + '%';
   const c = document.getElementById('answers');
