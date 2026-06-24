@@ -920,8 +920,8 @@ function setupShareButtons(tagline, type1, type2){
     window.open(url, '_blank', 'noopener,noreferrer');
   };
   document.getElementById('share-line').onclick = () => {
-    const url = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(text)}`;
-    window.open(url, '_blank', 'noopener,noreferrer');
+    const lineText = `${text} ${pageUrl}`;
+    location.href = `line://msg/text/${encodeURIComponent(lineText)}`;
   };
 }
 
