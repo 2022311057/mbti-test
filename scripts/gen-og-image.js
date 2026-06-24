@@ -21,25 +21,20 @@ const svg = `
   <text x="210" y="132" font-family="sans-serif" font-size="22" font-weight="700" fill="#7c3aed" text-anchor="middle">✨ MBTI 割合診断</text>
 
   <!-- headline -->
-  <text x="80" y="260" font-family="sans-serif" font-size="72" font-weight="900" fill="#1e1533">あなたの個性を</text>
-  <text x="80" y="345" font-family="sans-serif" font-size="72" font-weight="900" fill="url(#grad)">割合で診断しよう</text>
+  <text x="80" y="260" font-family="sans-serif" font-size="72" font-weight="900" fill="#1e1533">あなたの性格は</text>
+  <text x="80" y="345" font-family="sans-serif" font-size="72" font-weight="900" fill="url(#grad)">2タイプのブレンド</text>
 
   <!-- subtext -->
-  <text x="80" y="410" font-family="sans-serif" font-size="28" fill="#6b5b7b">INFJ 45% / INFP 28% / ...のように細かく可視化</text>
+  <text x="80" y="410" font-family="sans-serif" font-size="28" fill="#6b5b7b">「静かな夢想家」のような、あなただけの名前で診断</text>
 
-  <!-- bars mock (widths are exactly barMaxWidth * pct/100, matching the on-page DEMO_BARS values) -->
+  <!-- blend bar mock: INFJ 64.2% / ENFP 35.8%, widths exactly proportional -->
   <g>
-    <rect x="780" y="160" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="160" width="154" height="26" rx="13" fill="#059669"/>
-    <text x="1120" y="178" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INFJ 45.2%</text>
-
-    <rect x="780" y="210" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="210" width="96" height="26" rx="13" fill="#059669"/>
-    <text x="1120" y="228" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INFP 28.1%</text>
-
-    <rect x="780" y="260" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="260" width="52" height="26" rx="13" fill="#059669"/>
-    <text x="1120" y="278" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">ENFJ 15.3%</text>
+    <text x="780" y="150" font-family="sans-serif" font-size="26" font-weight="900" fill="#7c3aed" text-anchor="middle">「静かな夢想家」</text>
+    <rect x="700" y="180" width="500" height="36" rx="10" fill="#f3e8ff"/>
+    <rect x="700" y="180" width="321" height="36" rx="10" fill="#db2777"/>
+    <rect x="1021" y="180" width="179" height="36" rx="10" fill="#7c3aed"/>
+    <text x="710" y="205" font-family="sans-serif" font-size="18" font-weight="700" fill="#fff">INFJ 64.2%</text>
+    <text x="1190" y="205" font-family="sans-serif" font-size="18" font-weight="700" fill="#fff" text-anchor="end">35.8% ENFP</text>
   </g>
 
   <!-- footer -->

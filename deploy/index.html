@@ -4,18 +4,18 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBTI 割合診断 | あなたの個性を割合で診断</title>
-<meta name="description" content="32問に答えるだけで、あなたの性格を16タイプの「割合」で診断。INFJ45%・INFP28%のように、本当のあなたの個性を数値で可視化します。">
+<meta name="description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断。「静かな夢想家」のような、あなただけのオリジナルな名前で個性を可視化します。">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="MBTI 割合診断 | あなたの個性を割合で診断">
-<meta property="og:description" content="32問に答えるだけで、あなたの性格を16タイプの「割合」で診断。本当のあなたの個性を数値で可視化します。">
+<meta property="og:description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断。あなただけのオリジナルな名前で個性を可視化します。">
 <meta property="og:image" content="https://2022311057.github.io/mbti-test/og-image.png">
 <meta property="og:url" content="https://2022311057.github.io/mbti-test/mbti.html">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="MBTI 割合診断 | あなたの個性を割合で診断">
-<meta name="twitter:description" content="32問に答えるだけで、あなたの性格を16タイプの「割合」で診断できます。">
+<meta name="twitter:description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断できます。">
 <meta name="twitter:image" content="https://2022311057.github.io/mbti-test/og-image.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
@@ -167,24 +167,16 @@ body{
   font-size:.65rem;font-weight:700;
   padding:3px 9px;border-radius:20px;letter-spacing:.02em;
 }
-.preview-hero-row{
-  display:flex;align-items:baseline;gap:10px;margin-bottom:14px;
-}
-.preview-type-big{
-  font-size:2rem;font-weight:900;letter-spacing:.1em;
+.preview-tagline{
+  font-size:1.3rem;font-weight:900;letter-spacing:.04em;margin-bottom:10px;
   background:linear-gradient(135deg,#db2777,#7c3aed);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.preview-pct-big{font-size:1.15rem;font-weight:900;color:#9333ea;}
-.preview-name-sm{font-size:.78rem;color:var(--txt2);font-weight:600;margin-left:auto;}
-.preview-radar-wrap{display:flex;justify-content:center;margin-bottom:14px;}
-
-/* preview bars */
-.prow{display:flex;align-items:center;gap:8px;margin-bottom:5px;}
-.plabel{width:68px;font-size:.74rem;font-weight:700;color:var(--txt);flex-shrink:0;}
-.pbar-w{flex:1;background:#f3e8ff;border-radius:3px;height:14px;overflow:hidden;}
-.pbar{height:100%;border-radius:3px;width:0%;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
-.ppct{width:36px;text-align:right;font-size:.7rem;color:var(--txt3);font-weight:500;flex-shrink:0;}
+.preview-radar-wrap{display:flex;justify-content:center;margin-top:14px;}
+.preview-blend-bar{display:flex;height:18px;border-radius:6px;overflow:hidden;background:#f3e8ff;}
+.preview-blend-bar-1{background:linear-gradient(90deg,#f472b6,#db2777);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:700;}
+.preview-blend-bar-2{background:linear-gradient(90deg,#c4b5fd,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.65rem;font-weight:700;}
+.preview-blend-desc{font-size:.75rem;color:var(--txt2);line-height:1.6;margin-top:10px;}
 
 /* mobile vs pc preview */
 .preview-mobile{
@@ -232,24 +224,24 @@ body{
 }
 .res-hero::after{content:'✨';position:absolute;top:12px;right:16px;font-size:1.2rem;opacity:.5;}
 .res-eyebrow{font-size:.75rem;font-weight:700;color:#db2777;letter-spacing:.1em;margin-bottom:10px}
-.res-type{font-size:4rem;font-weight:900;letter-spacing:.12em;background:linear-gradient(135deg,#db2777,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-.res-pct{font-size:1.9rem;font-weight:900;color:#9333ea;margin:4px 0 8px;}
-.res-name{font-size:1.1rem;font-weight:700;color:var(--txt);margin-bottom:10px}
-.res-desc{font-size:.85rem;color:var(--txt2);line-height:1.85;max-width:420px;margin:0 auto}
+.res-tagline{font-size:2.6rem;font-weight:900;letter-spacing:.06em;background:linear-gradient(135deg,#db2777,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+.blend-card{
+  background:#fff;border:1.5px solid #f3e8ff;border-radius:18px;
+  padding:22px 24px;margin-bottom:6px;
+}
+.blend-bar{display:flex;height:28px;border-radius:8px;overflow:hidden;background:#f3e8ff;}
+.blend-bar-1{background:linear-gradient(90deg,#f472b6,#db2777);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.78rem;font-weight:700;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.blend-bar-2{background:linear-gradient(90deg,#c4b5fd,#7c3aed);display:flex;align-items:center;justify-content:center;color:#fff;font-size:.78rem;font-weight:700;transition:width 1s cubic-bezier(.4,0,.2,1);}
+.blend-bar-labels{display:flex;justify-content:space-between;font-size:.78rem;color:var(--txt2);font-weight:700;margin-top:8px}
+.blend-desc{font-size:.88rem;color:var(--txt2);line-height:1.8;margin-top:14px;text-align:center}
+.blend-sub3{font-size:.78rem;color:var(--txt3);text-align:center;margin:10px 0 4px}
 .sec-label{
   font-size:.72rem;font-weight:800;color:var(--txt3);
   text-transform:uppercase;letter-spacing:.12em;
   margin:22px 0 12px;display:flex;align-items:center;gap:8px;
 }
 .sec-label::after{content:'';flex:1;height:1px;background:#f3e8ff}
-.top3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px}
-.tcard{background:#fff;border:2px solid #f3e8ff;border-radius:16px;padding:16px 12px;text-align:center;transition:border-color .2s;}
-.tcard:hover{border-color:#c084fc}
-.top3-note{font-size:.68rem;color:var(--txt3);line-height:1.6;margin:8px 0 4px}
-.tc-type{font-size:1.15rem;font-weight:900;margin-bottom:3px}
-.tc-pct{font-size:.82rem;color:#9333ea;font-weight:700;margin-bottom:7px}
-.tc-name{font-size:.78rem;font-weight:700;color:var(--txt);margin-bottom:4px}
-.tc-desc{font-size:.72rem;color:var(--txt2);line-height:1.6}
 .type-list{display:flex;flex-direction:column;gap:7px}
 .trow{display:flex;align-items:center;gap:9px}
 .tlabel{width:50px;font-size:.82rem;font-weight:700;color:var(--txt);flex-shrink:0}
@@ -272,9 +264,8 @@ body{
 @media(max-width:580px){
   .card{padding:22px 16px}
   .welcome-h1{font-size:1.9rem}
-  .top3{grid-template-columns:1fr}
   .func-grid{grid-template-columns:1fr}
-  .res-type{font-size:3rem}
+  .res-tagline{font-size:1.9rem}
 }
 
 /* =====================================================
@@ -311,8 +302,7 @@ body{
   .res-cols{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
   .res-col-right .func-grid{grid-template-columns:1fr}
   .res-col-right .radar-wrap svg{width:220px;height:220px}
-  .top3{grid-template-columns:repeat(3,1fr)}
-  .res-type{font-size:4.8rem}
+  .res-tagline{font-size:3.4rem}
   .res-hero{padding:36px 32px}
 }
 </style>
@@ -338,13 +328,17 @@ body{
         難しいことは考えなくてOK。
       </div>
 
-      <!-- Mobile-only: compact preview bars -->
+      <!-- Mobile-only: compact preview -->
       <div class="preview-mobile">
         <div class="preview-header">
           <span class="preview-title">診断結果イメージ</span>
           <span class="sample-badge">サンプル</span>
         </div>
-        <div id="demo-bars-mobile"></div>
+        <div class="preview-tagline" id="demo-tagline-mobile"></div>
+        <div class="preview-blend-bar" id="demo-blend-bar-mobile">
+          <div class="preview-blend-bar-1" id="demo-blend-1-mobile"></div>
+          <div class="preview-blend-bar-2" id="demo-blend-2-mobile"></div>
+        </div>
       </div>
 
       <div class="feat-list">
@@ -378,22 +372,22 @@ body{
     <!-- ===== RIGHT: PC preview card + chips ===== -->
     <div class="welcome-right">
 
-      <!-- PC-only: full preview (radar + bars) -->
+      <!-- PC-only: full preview (tagline + blend bar + radar) -->
       <div class="preview-pc">
         <div class="preview-card">
           <div class="preview-header">
             <span class="preview-title">診断結果イメージ</span>
             <span class="sample-badge">サンプル</span>
           </div>
-          <div class="preview-hero-row">
-            <span class="preview-type-big">💜 INFJ</span>
-            <span class="preview-pct-big">45.2%</span>
-            <span class="preview-name-sm">提唱者</span>
+          <div class="preview-tagline" id="demo-tagline-pc"></div>
+          <div class="preview-blend-bar" id="demo-blend-bar-pc">
+            <div class="preview-blend-bar-1" id="demo-blend-1-pc"></div>
+            <div class="preview-blend-bar-2" id="demo-blend-2-pc"></div>
           </div>
+          <p class="preview-blend-desc" id="demo-blend-desc"></p>
           <div class="preview-radar-wrap">
             <svg id="demo-radar" width="200" height="200" viewBox="0 0 200 200"></svg>
           </div>
-          <div id="demo-bars-pc"></div>
         </div>
       </div>
 
@@ -443,16 +437,22 @@ body{
   <div style="text-align:center;margin-bottom:20px;font-size:1.05rem;font-weight:700;color:var(--txt)">MBTI 割合診断 結果 🎉</div>
 
   <div class="res-hero">
-    <div class="res-eyebrow">あなたのタイプ</div>
-    <div class="res-type" id="r-type"></div>
-    <div class="res-pct" id="r-pct"></div>
-    <div class="res-name" id="r-name"></div>
-    <div class="res-desc" id="r-desc"></div>
+    <div class="res-eyebrow">あなたの性格ブレンド</div>
+    <div class="res-tagline" id="r-tagline"></div>
   </div>
 
-  <div class="sec-label">TOP 3 タイプ（3タイプ内での割合）</div>
-  <div class="top3" id="top3"></div>
-  <p class="top3-note">※上位3タイプの割合を100%として再計算した値です。全16タイプでの本来の割合は下の「全16タイプ割合分布」をご覧ください。</p>
+  <div class="blend-card">
+    <div class="blend-bar" id="blend-bar">
+      <div class="blend-bar-1" id="blend-bar-1"></div>
+      <div class="blend-bar-2" id="blend-bar-2"></div>
+    </div>
+    <div class="blend-bar-labels">
+      <span id="blend-label-1"></span>
+      <span id="blend-label-2"></span>
+    </div>
+    <p class="blend-desc" id="blend-desc"></p>
+  </div>
+  <p class="blend-sub3" id="blend-sub3"></p>
 
   <div class="res-cols">
     <div class="res-col-left">
@@ -506,13 +506,7 @@ const CHIP_DATA = [
 // Demo data for welcome screen preview (INFJ-leaning sample)
 // [Ne, Ni, Se, Si, Te, Ti, Fe, Fi]
 const DEMO_SCORES = [0.45, 0.85, 0.15, 0.28, 0.10, 0.52, 0.80, 0.62];
-const DEMO_BARS = [
-  {type:'INFJ', e:'💜', pct:45.2, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
-  {type:'INFP', e:'🌸', pct:28.1, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
-  {type:'ENFJ', e:'🌟', pct:15.3, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
-  {type:'ENFP', e:'🦋', pct: 8.1, grad:'linear-gradient(90deg,#6ee7b7,#059669)'},
-  {type:'INTJ', e:'⚡', pct: 3.3, grad:'linear-gradient(90deg,#c084fc,#7c3aed)'},
-];
+const DEMO_BLEND = { type1:'INFJ', type2:'ENFP', pct1:64.2 };
 
 // Ideal vectors: [Ne, Ni, Se, Si, Te, Ti, Fe, Fi]
 const IDEAL = {
@@ -647,6 +641,34 @@ const ADOT_STYLE = [
   {bg:'#f1f5f9',c:'#94a3b8'},
 ];
 
+const TGROUPS = {
+  NT:['INTJ','INTP','ENTJ','ENTP'],
+  NF:['INFJ','INFP','ENFJ','ENFP'],
+  SJ:['ISTJ','ISFJ','ESTJ','ESFJ'],
+  SP:['ISTP','ISFP','ESTP','ESFP'],
+};
+function tGroup(t){
+  return Object.keys(TGROUPS).find(g => TGROUPS[g].includes(t));
+}
+
+// ベースタイプの形容詞(16) + アクセント気質の名詞(4) + 同気質時の強化名詞(4)を
+// 組み合わせて「性格ブレンド」のタグラインを自動生成する。
+// 例: INFJ(静かな) + ENFP由来のSPアクセント(自由人) → 「静かな自由人」
+const BASE_KEYWORD = {
+  INTJ:'孤高の', INTP:'探究心旺盛な', ENTJ:'野心的な', ENTP:'機知に富んだ',
+  INFJ:'静かな', INFP:'繊細な', ENFJ:'情熱的な', ENFP:'自由な',
+  ISTJ:'堅実な', ISFJ:'温かな', ESTJ:'実直な', ESFJ:'社交的な',
+  ISTP:'冷静な', ISFP:'感性豊かな', ESTP:'エネルギッシュな', ESFP:'明るい',
+};
+const ACCENT_KEYWORD = { NT:'知性派', NF:'理想家', SJ:'堅実家', SP:'自由人' };
+const INTENSIFIED_KEYWORD = { NT:'戦略家', NF:'夢想家', SJ:'職人', SP:'冒険者' };
+
+function buildBlendTagline(type1, type2){
+  const g1 = tGroup(type1), g2 = tGroup(type2);
+  const accent = (g1 === g2) ? INTENSIFIED_KEYWORD[g1] : ACCENT_KEYWORD[g2];
+  return BASE_KEYWORD[type1] + accent;
+}
+
 const tColor = t =>
   ['INTJ','INTP','ENTJ','ENTP'].includes(t) ? '#7c3aed' :
   ['INFJ','INFP','ENFJ','ENFP'].includes(t) ? '#059669' :
@@ -673,25 +695,27 @@ let curQ = 0, answers = [];
 })();
 
 // ===== Demo preview (welcome screen) =====
-function buildDemoBars(containerId) {
-  const el = document.getElementById(containerId);
-  if (!el) return;
-  el.innerHTML = '';
-  DEMO_BARS.forEach(({type, e, pct, grad}) => {
-    el.innerHTML += `<div class="prow">
-      <span class="plabel">${e} ${type}</span>
-      <div class="pbar-w"><div class="pbar" id="pb-${containerId}-${type}" style="background:${grad}"></div></div>
-      <span class="ppct">${pct}%</span>
-    </div>`;
-  });
+function buildDemoBlend(suffix) {
+  const tagEl = document.getElementById(`demo-tagline-${suffix}`);
+  const bar1 = document.getElementById(`demo-blend-1-${suffix}`);
+  const bar2 = document.getElementById(`demo-blend-2-${suffix}`);
+  if (!tagEl || !bar1 || !bar2) return;
+  const { type1, type2, pct1 } = DEMO_BLEND;
+  const pct2 = 100 - pct1;
+  tagEl.textContent = `「${buildBlendTagline(type1, type2)}」`;
+  bar1.textContent = `${type1} ${pct1.toFixed(1)}%`;
+  bar2.textContent = `${pct2.toFixed(1)}% ${type2}`;
   setTimeout(() => {
     requestAnimationFrame(() => {
-      DEMO_BARS.forEach(({type, pct}) => {
-        const bar = document.getElementById(`pb-${containerId}-${type}`);
-        if (bar) bar.style.width = pct + '%';
-      });
+      bar1.style.width = pct1 + '%';
+      bar2.style.width = pct2 + '%';
     });
   }, 500);
+  const descEl = document.getElementById('demo-blend-desc');
+  if (descEl) {
+    const info1 = TINFO[type1], info2 = TINFO[type2];
+    descEl.textContent = `${type1}（${info1.n}）がベースで、そこに${type2}（${info2.n}）がしっかり混ざっている。`;
+  }
 }
 
 function drawDemoRadar() {
@@ -727,8 +751,8 @@ function drawDemoRadar() {
 
 // Initialize demo on page load
 (function(){
-  buildDemoBars('demo-bars-pc');
-  buildDemoBars('demo-bars-mobile');
+  buildDemoBlend('pc');
+  buildDemoBlend('mobile');
   drawDemoRadar();
 })();
 
@@ -816,28 +840,35 @@ function calculate(){
 
 // ===== Result rendering =====
 function renderResults({uv, typed}){
-  const top3Raw = typed.slice(0,3);
-  const sum3 = top3Raw.reduce((s,x) => s+x.prob, 0);
-  const top3Norm = top3Raw.map(x => ({...x, normPct: x.prob/sum3*100}));
+  const [t1, t2, t3] = typed;
+  const sum2 = t1.prob + t2.prob;
+  const pct1 = t1.prob/sum2*100, pct2 = t2.prob/sum2*100;
+  const info1 = TINFO[t1.type], info2 = TINFO[t2.type];
+  const tagline = buildBlendTagline(t1.type, t2.type);
 
-  const top = top3Norm[0], ti = TINFO[top.type];
-  document.getElementById('r-type').textContent = top.type;
-  document.getElementById('r-pct').textContent = top.normPct.toFixed(1) + '%';
-  document.getElementById('r-name').textContent = ti.n;
-  document.getElementById('r-desc').textContent = ti.d;
+  document.getElementById('r-tagline').textContent = `「${tagline}」`;
 
-  const t3 = document.getElementById('top3');
-  t3.innerHTML = '';
-  top3Norm.forEach(({type,normPct}) => {
-    const col = tColor(type), inf = TINFO[type];
-    const ch = CHIP_DATA.find(x => x.t === type);
-    t3.innerHTML += `<div class="tcard" style="border-color:${col}33">
-      <div class="tc-type" style="color:${col}">${ch?ch.e+' ':''}${type}</div>
-      <div class="tc-pct">${normPct.toFixed(1)}%</div>
-      <div class="tc-name">${inf.n}</div>
-      <div class="tc-desc">${inf.d}</div>
-    </div>`;
-  });
+  let desc;
+  if(pct1 >= 75){
+    desc = `ほぼ純粋な${t1.type}（${info1.n}）タイプ。そこにわずかに${t2.type}（${info2.n}）の香りが混ざっている。`;
+  } else if(pct1 >= 60){
+    desc = `${t1.type}（${info1.n}）がベースで、そこに${t2.type}（${info2.n}）がしっかり混ざっている。`;
+  } else {
+    desc = `${t1.type}（${info1.n}）と${t2.type}（${info2.n}）、ふたつの顔を半分ずつ持っている。`;
+  }
+  document.getElementById('blend-desc').textContent = desc;
+
+  document.getElementById('blend-label-1').textContent = `${t1.type} ${pct1.toFixed(1)}%`;
+  document.getElementById('blend-label-2').textContent = `${pct2.toFixed(1)}% ${t2.type}`;
+  const bar1 = document.getElementById('blend-bar-1'), bar2 = document.getElementById('blend-bar-2');
+  bar1.style.width = '0%'; bar2.style.width = '0%';
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    bar1.style.width = pct1 + '%';
+    bar2.style.width = pct2 + '%';
+  }));
+
+  const info3 = TINFO[t3.type];
+  document.getElementById('blend-sub3').textContent = `奥底にある可能性: ${t3.type}（${info3.n}）`;
 
   const tl = document.getElementById('typelist');
   tl.innerHTML = '';
@@ -876,14 +907,13 @@ function renderResults({uv, typed}){
   }));
 
   drawRadar(uv);
-  setupShareButtons(top.type, top.normPct/100, ti.n);
+  setupShareButtons(tagline, t1.type, t2.type);
 }
 
-function setupShareButtons(type, prob, name){
-  const pct = (prob*100).toFixed(1);
+function setupShareButtons(tagline, type1, type2){
   const base = location.origin + location.pathname;
-  const pageUrl = `${base}?type=${type}&pct=${pct}&name=${encodeURIComponent(name)}`;
-  const text = `私の診断結果は「${type} ${pct}% (${name})」でした！（独自のエンタメ診断・公式MBTIではありません） #割合診断`;
+  const pageUrl = `${base}?type=${type1}&type2=${type2}`;
+  const text = `私は「${tagline}」タイプ（${type1}×${type2}）でした！（独自のエンタメ診断・公式MBTIではありません） #割合診断`;
 
   document.getElementById('share-x').onclick = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`;
@@ -899,18 +929,17 @@ function setupShareButtons(type, prob, name){
 function renderSharedResultBanner(){
   const params = new URLSearchParams(location.search);
   const type = params.get('type');
-  const pct = params.get('pct');
-  const name = params.get('name');
-  if(!type || !TINFO[type]) return;
+  const type2 = params.get('type2');
+  if(!type || !TINFO[type] || !type2 || !TINFO[type2]) return;
 
+  const tagline = buildBlendTagline(type, type2);
   const banner = document.createElement('div');
   banner.className = 'shared-banner';
   banner.innerHTML = `
     <div class="shared-banner-label">友達の診断結果</div>
     <div class="shared-banner-row">
-      <span class="shared-banner-type">${type}</span>
-      <span class="shared-banner-pct">${pct ? pct + '%' : ''}</span>
-      <span class="shared-banner-name">${name || ''}</span>
+      <span class="shared-banner-type">「${tagline}」</span>
+      <span class="shared-banner-name">${type}×${type2}</span>
     </div>
     <p class="shared-banner-cta">あなたも32問の割合診断をやってみよう ↓</p>
   `;
