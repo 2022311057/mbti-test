@@ -43,7 +43,7 @@ const svg = `
   </g>
 
   <!-- footer -->
-  <text x="80" y="560" font-family="sans-serif" font-size="24" fill="#a89db8">32問・約5分で診断 🌸</text>
+  <text x="80" y="560" font-family="sans-serif" font-size="24" fill="#a89db8">48問・約7分で診断 🌸</text>
 </svg>
 `;
 
