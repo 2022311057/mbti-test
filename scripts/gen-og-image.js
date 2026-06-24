@@ -25,21 +25,21 @@ const svg = `
   <text x="80" y="345" font-family="sans-serif" font-size="72" font-weight="900" fill="url(#grad)">割合で診断しよう</text>
 
   <!-- subtext -->
-  <text x="80" y="410" font-family="sans-serif" font-size="28" fill="#6b5b7b">INFJ 45% / ENFJ 26% / ...のように細かく可視化</text>
+  <text x="80" y="410" font-family="sans-serif" font-size="28" fill="#6b5b7b">INFJ 45% / INFP 28% / ...のように細かく可視化</text>
 
-  <!-- bars mock -->
+  <!-- bars mock (widths are exactly barMaxWidth * pct/100, matching the on-page DEMO_BARS values) -->
   <g>
     <rect x="780" y="160" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="160" width="290" height="26" rx="13" fill="#059669"/>
-    <text x="1120" y="178" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INFJ 45%</text>
+    <rect x="780" y="160" width="154" height="26" rx="13" fill="#059669"/>
+    <text x="1120" y="178" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INFJ 45.2%</text>
 
     <rect x="780" y="210" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="210" width="190" height="26" rx="13" fill="#059669"/>
-    <text x="1120" y="228" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">ENFJ 26%</text>
+    <rect x="780" y="210" width="96" height="26" rx="13" fill="#059669"/>
+    <text x="1120" y="228" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INFP 28.1%</text>
 
     <rect x="780" y="260" width="340" height="26" rx="13" fill="#f3e8ff"/>
-    <rect x="780" y="260" width="70" height="26" rx="13" fill="#7c3aed"/>
-    <text x="1120" y="278" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">INTJ 7%</text>
+    <rect x="780" y="260" width="52" height="26" rx="13" fill="#059669"/>
+    <text x="1120" y="278" font-family="sans-serif" font-size="20" fill="#a89db8" text-anchor="end">ENFJ 15.3%</text>
   </g>
 
   <!-- footer -->

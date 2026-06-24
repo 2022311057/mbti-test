@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>MBTI 割合診断 | あなたの個性を割合で診断</title>
-<meta name="description" content="48問に答えるだけで、あなたの性格を16タイプの「割合」で診断。ISFJ20%・INFJ80%のように、本当のあなたの個性を数値で可視化します。">
+<meta name="description" content="48問に答えるだけで、あなたの性格を16タイプの「割合」で診断。INFJ45%・INFP28%のように、本当のあなたの個性を数値で可視化します。">
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="MBTI 割合診断 | あなたの個性を割合で診断">
@@ -126,6 +126,18 @@ body{
 .btn-sec:hover{background:#f3e8ff}
 .disclaimer{font-size:.68rem;color:var(--txt3);line-height:1.6;margin-top:14px;text-align:center}
 
+.shared-banner{
+  background:linear-gradient(135deg,#fce7f3,#ede9fe);
+  border:1.5px solid #f3d6ec;border-radius:16px;
+  padding:16px 18px;margin-bottom:22px;text-align:center;
+}
+.shared-banner-label{font-size:.7rem;font-weight:800;color:#9333ea;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+.shared-banner-row{display:flex;align-items:baseline;justify-content:center;gap:8px;flex-wrap:wrap}
+.shared-banner-type{font-size:1.6rem;font-weight:900;color:#db2777}
+.shared-banner-pct{font-size:1.1rem;font-weight:800;color:#9333ea}
+.shared-banner-name{font-size:.85rem;font-weight:600;color:var(--txt2)}
+.shared-banner-cta{font-size:.8rem;color:var(--txt2);margin-top:8px}
+
 .share-row{display:flex;gap:10px;margin-top:24px}
 .btn-share{
   flex:1;padding:13px;border-radius:14px;border:none;
@@ -134,7 +146,7 @@ body{
 }
 .btn-share:hover{transform:translateY(-2px)}
 .btn-share-x{background:#000}
-.btn-share-line{background:#06c755}
+.btn-share-line{background:#06c755;color:#06281a}
 
 /* ===== DEMO PREVIEW CARD ===== */
 .preview-card{
@@ -187,9 +199,6 @@ body{
 .prog-meta{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:var(--txt3);margin-bottom:8px}
 .prog-bar{height:7px;background:#fce7f3;border-radius:4px;overflow:hidden}
 .prog-fill{height:100%;background:linear-gradient(90deg,#f472b6,#9333ea);border-radius:4px;transition:width .45s cubic-bezier(.4,0,.2,1);}
-.func-row{display:flex;align-items:center;gap:8px;margin-bottom:18px}
-.ftag{display:inline-block;font-size:.72rem;font-weight:700;padding:4px 12px;border-radius:20px;background:#fce7f3;color:#db2777;letter-spacing:.04em;}
-.func-jp{font-size:.78rem;color:var(--txt3);font-weight:500}
 .qtext{font-size:1.05rem;line-height:1.9;color:var(--txt);font-weight:500;margin-bottom:24px;min-height:66px;}
 .answers{display:flex;flex-direction:column;gap:8px}
 .abtn{
@@ -451,7 +460,7 @@ body{
   </div>
 
   <div class="share-row">
-    <button class="btn-share btn-share-x" id="share-x">𝕏 でシェア</button>
+    <button class="btn-share btn-share-x" id="share-x">Xでシェア</button>
     <button class="btn-share btn-share-line" id="share-line">LINEでシェア</button>
   </div>
 
@@ -562,7 +571,7 @@ const QUESTIONS_BY_FUNC = [
     {f:2,t:'考えるより先に行動することが多い（まずやってみて、後で考えるタイプ）。'},
     {f:2,t:'美的センスや質感、細部の変化にすぐ気づき、こだわりがある。'},
     {f:2,t:'スポーツ・ダンス・料理・手作業など、身体を動かす活動に自然と心が惹かれる。'},
-    {f:2,t:'周囲の状況や物の位置、人の表情のちょっとした変化に自然と目が向く。'},
+    {f:2,t:'今その場にある景色や物、人の表情など、周りの様子に自然と目が向く。'},
     {f:2,t:'今この場で起きていることに反応して、すぐに体が動く感覚がある。'},
   ],
   // Si
@@ -612,16 +621,37 @@ const QUESTIONS_BY_FUNC = [
   ],
 ];
 
-function interleaveByFunction(groups){
-  const maxLen = Math.max(...groups.map(g => g.length));
+function shuffleArray(arr){
+  const a = arr.slice();
+  for(let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+// 機能内の項目順と、各「巡」での機能の順番を毎回シャッフルしつつ、
+// 同一機能の項目が連続しないことを保証する（記憶アンカリング対策 + 連続出題防止の両立）。
+function buildQuestionOrder(){
+  const shuffledGroups = QUESTIONS_BY_FUNC.map(g => shuffleArray(g));
+  const maxLen = Math.max(...shuffledGroups.map(g => g.length));
   const result = [];
+  let prevFunc = -1;
   for(let i=0;i<maxLen;i++){
-    groups.forEach(g => { if(g[i]) result.push(g[i]); });
+    let funcOrder = shuffleArray(
+      shuffledGroups.map((g,f) => f).filter(f => shuffledGroups[f][i])
+    );
+    if(funcOrder.length > 1 && funcOrder[0] === prevFunc){
+      const swapIdx = 1 + Math.floor(Math.random()*(funcOrder.length-1));
+      [funcOrder[0], funcOrder[swapIdx]] = [funcOrder[swapIdx], funcOrder[0]];
+    }
+    funcOrder.forEach(f => result.push(shuffledGroups[f][i]));
+    prevFunc = funcOrder[funcOrder.length-1];
   }
   return result;
 }
 
-const QUESTIONS = interleaveByFunction(QUESTIONS_BY_FUNC);
+let QUESTIONS = buildQuestionOrder();
 
 const ALBL = ['とても当てはまる','やや当てはまる','どちらでもない','あまり違う','全く違う'];
 const ADOT_STYLE = [
@@ -722,7 +752,7 @@ function showScreen(id){
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(id).classList.add('active');
 }
-function startQuiz(){curQ=0;answers=[];showScreen('quiz');renderQ();}
+function startQuiz(){QUESTIONS=buildQuestionOrder();curQ=0;answers=[];showScreen('quiz');renderQ();}
 function resetQuiz(){showScreen('welcome');}
 
 function renderQ(){
@@ -847,8 +877,10 @@ function renderResults({uv, typed}){
 }
 
 function setupShareButtons(type, prob, name){
-  const pageUrl = location.href.split('#')[0];
-  const text = `私のMBTI割合診断の結果は「${type} ${(prob*100).toFixed(1)}% (${name})」でした！#MBTI割合診断`;
+  const pct = (prob*100).toFixed(1);
+  const base = location.origin + location.pathname;
+  const pageUrl = `${base}?type=${type}&pct=${pct}&name=${encodeURIComponent(name)}`;
+  const text = `私の診断結果は「${type} ${pct}% (${name})」でした！（独自のエンタメ診断・公式MBTIではありません） #割合診断`;
 
   document.getElementById('share-x').onclick = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`;
@@ -859,6 +891,30 @@ function setupShareButtons(type, prob, name){
     window.open(url, '_blank', 'noopener,noreferrer');
   };
 }
+
+// ===== Shared-result deep link (friend clicked a shared result URL) =====
+function renderSharedResultBanner(){
+  const params = new URLSearchParams(location.search);
+  const type = params.get('type');
+  const pct = params.get('pct');
+  const name = params.get('name');
+  if(!type || !TINFO[type]) return;
+
+  const banner = document.createElement('div');
+  banner.className = 'shared-banner';
+  banner.innerHTML = `
+    <div class="shared-banner-label">友達の診断結果</div>
+    <div class="shared-banner-row">
+      <span class="shared-banner-type">${type}</span>
+      <span class="shared-banner-pct">${pct ? pct + '%' : ''}</span>
+      <span class="shared-banner-name">${name || ''}</span>
+    </div>
+    <p class="shared-banner-cta">あなたも48問の割合診断をやってみよう ↓</p>
+  `;
+  const card = document.querySelector('#welcome .card');
+  card.insertBefore(banner, card.firstChild);
+}
+renderSharedResultBanner();
 
 function drawRadar(scores){
   const svg = document.getElementById('radar');
