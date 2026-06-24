@@ -7,14 +7,14 @@
 <meta name="description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断。「静かな夢想家」のような、あなただけのオリジナルな名前で個性を可視化します。">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="MBTI 割合診断 | あなたの個性を割合で診断">
+<meta property="og:title" content="MBTI 性格ブレンド診断 | 2タイプのブレンドであなたを診断">
 <meta property="og:description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断。あなただけのオリジナルな名前で個性を可視化します。">
 <meta property="og:image" content="https://2022311057.github.io/mbti-test/og-image.png">
 <meta property="og:url" content="https://2022311057.github.io/mbti-test/mbti.html">
 <meta property="og:locale" content="ja_JP">
 
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="MBTI 割合診断 | あなたの個性を割合で診断">
+<meta name="twitter:title" content="MBTI 性格ブレンド診断 | 2タイプのブレンドであなたを診断">
 <meta name="twitter:description" content="32問に答えるだけで、あなたの性格を2タイプのブレンドで診断できます。">
 <meta name="twitter:image" content="https://2022311057.github.io/mbti-test/og-image.png">
 
@@ -200,6 +200,7 @@ body{
   color:var(--txt);text-align:left;width:100%;transition:all .15s;
 }
 .abtn:hover{background:#fdf4ff;border-color:#c084fc;transform:translateX(5px)}
+.abtn-selected{background:#f3e8ff;border-color:#7c3aed}
 .adot{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;}
 .btn-back{
   display:block;margin:16px auto 0;padding:8px 4px;border:none;background:none;
@@ -365,7 +366,7 @@ body{
         </div>
       </div>
 
-      <button class="btn-cta" onclick="startQuiz()">割合診断スタート ✨</button>
+      <button class="btn-cta" onclick="startQuiz()">ブレンド診断スタート ✨</button>
       <p class="disclaimer">※本サイトはMBTI(Myers-Briggs Type Indicator)型理論を参考にした独自のエンターテイメント診断であり、公式の心理学的診断ではありません。結果は参考情報としてお楽しみください。</p>
     </div>
 
@@ -424,8 +425,8 @@ body{
 <div class="card" style="text-align:center;width:100%">
   <span class="pulse-emoji">🌸</span>
   <div class="spinner"></div>
-  <div style="font-size:1.05rem;font-weight:700;color:var(--txt);margin-bottom:8px">MBTI割合を計算中...</div>
-  <div style="font-size:.85rem;color:var(--txt2);line-height:1.8">あなたの回答を分析して<br>16タイプの割合を算出しています</div>
+  <div style="font-size:1.05rem;font-weight:700;color:var(--txt);margin-bottom:8px">性格ブレンドを計算中...</div>
+  <div style="font-size:.85rem;color:var(--txt2);line-height:1.8">あなたの回答を分析して<br>2タイプのブレンド比率を算出しています</div>
 </div>
 </div>
 </div>
@@ -434,7 +435,7 @@ body{
 <div id="result" class="screen">
 <div class="result-card" style="width:100%;display:flex;justify-content:center;margin:auto">
 <div class="card" style="width:100%">
-  <div style="text-align:center;margin-bottom:20px;font-size:1.05rem;font-weight:700;color:var(--txt)">MBTI 割合診断 結果 🎉</div>
+  <div style="text-align:center;margin-bottom:20px;font-size:1.05rem;font-weight:700;color:var(--txt)">MBTI 性格ブレンド診断 結果 🎉</div>
 
   <div class="res-hero">
     <div class="res-eyebrow">あなたの性格ブレンド</div>
@@ -669,16 +670,18 @@ function buildBlendTagline(type1, type2){
   return BASE_KEYWORD[type1] + accent;
 }
 
-const tColor = t =>
-  ['INTJ','INTP','ENTJ','ENTP'].includes(t) ? '#7c3aed' :
-  ['INFJ','INFP','ENFJ','ENFP'].includes(t) ? '#059669' :
-  ['ISTJ','ISFJ','ESTJ','ESFJ'].includes(t) ? '#d97706' : '#e11d48';
-
-const tBarGrad = t =>
-  ['INTJ','INTP','ENTJ','ENTP'].includes(t) ? 'linear-gradient(90deg,#c084fc,#7c3aed)' :
-  ['INFJ','INFP','ENFJ','ENFP'].includes(t) ? 'linear-gradient(90deg,#6ee7b7,#059669)' :
-  ['ISTJ','ISFJ','ESTJ','ESFJ'].includes(t) ? 'linear-gradient(90deg,#fcd34d,#d97706)' :
-                                               'linear-gradient(90deg,#fda4af,#e11d48)';
+// 気質グループの分類はTGROUPS/tGroup()を唯一の正とし、色定義もそこから派生させる
+// (以前はtColor/tBarGradがそれぞれ別にタイプ配列を持っており、3箇所で同じ分類が
+// 重複していた。1箇所を直すと他が追従しないリスクがあったため統一)
+const GROUP_COLOR = { NT:'#7c3aed', NF:'#059669', SJ:'#d97706', SP:'#e11d48' };
+const GROUP_BAR_GRAD = {
+  NT: 'linear-gradient(90deg,#c084fc,#7c3aed)',
+  NF: 'linear-gradient(90deg,#6ee7b7,#059669)',
+  SJ: 'linear-gradient(90deg,#fcd34d,#d97706)',
+  SP: 'linear-gradient(90deg,#fda4af,#e11d48)',
+};
+const tColor = t => GROUP_COLOR[tGroup(t)];
+const tBarGrad = t => GROUP_BAR_GRAD[tGroup(t)];
 
 let curQ = 0, answers = [];
 
@@ -776,7 +779,7 @@ function renderQ(){
   c.innerHTML = '';
   ALBL.forEach((lbl, i) => {
     const btn = document.createElement('button');
-    btn.className = 'abtn';
+    btn.className = 'abtn' + (answers[curQ] === i+1 ? ' abtn-selected' : '');
     const {bg,c:col} = ADOT_STYLE[i];
     btn.innerHTML = `<span class="adot" style="background:${bg};color:${col}">${i+1}</span>${lbl}`;
     btn.onclick = () => handleAnswer(i + 1);
@@ -787,12 +790,11 @@ function renderQ(){
 function handleBack(){
   if(curQ === 0) return;
   curQ--;
-  answers.pop();
   renderQ();
 }
 
 function handleAnswer(v){
-  answers.push(v);
+  answers[curQ] = v;
   curQ++;
   if(curQ >= QUESTIONS.length){
     document.getElementById('qcounter').textContent = `質問 ${QUESTIONS.length} / ${QUESTIONS.length}`;
@@ -868,7 +870,7 @@ function renderResults({uv, typed}){
   }));
 
   const info3 = TINFO[t3.type];
-  document.getElementById('blend-sub3').textContent = `奥底にある可能性: ${t3.type}（${info3.n}）`;
+  document.getElementById('blend-sub3').textContent = `さらに奥には、${t3.type}（${info3.n}）という第三の顔も隠れている。`;
 
   const tl = document.getElementById('typelist');
   tl.innerHTML = '';
@@ -913,15 +915,22 @@ function renderResults({uv, typed}){
 function setupShareButtons(tagline, type1, type2){
   const base = location.origin + location.pathname;
   const pageUrl = `${base}?type=${type1}&type2=${type2}`;
-  const text = `私は「${tagline}」タイプ（${type1}×${type2}）でした！（独自のエンタメ診断・公式MBTIではありません） #割合診断`;
+  const text = `私は「${tagline}」タイプ（${type1}×${type2}）でした！（独自のエンタメ診断・公式MBTIではありません） #性格ブレンド診断`;
 
   document.getElementById('share-x').onclick = () => {
     const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(pageUrl)}`;
     window.open(url, '_blank', 'noopener,noreferrer');
   };
   document.getElementById('share-line').onclick = () => {
-    const lineText = `${text} ${pageUrl}`;
-    location.href = `line://msg/text/${encodeURIComponent(lineText)}`;
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if(isMobile){
+      // モバイル: LINEアプリを直接起動(非公式だが広く使われるスキーム)
+      location.href = `line://msg/text/${encodeURIComponent(text + ' ' + pageUrl)}`;
+    } else {
+      // PC等: LINE公式のWeb共有URL(社交プラグイン)にフォールバック
+      const url = `https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(pageUrl)}&text=${encodeURIComponent(text)}`;
+      window.open(url, '_blank', 'noopener,noreferrer');
+    }
   };
 }
 
@@ -941,7 +950,7 @@ function renderSharedResultBanner(){
       <span class="shared-banner-type">「${tagline}」</span>
       <span class="shared-banner-name">${type}×${type2}</span>
     </div>
-    <p class="shared-banner-cta">あなたも32問の割合診断をやってみよう ↓</p>
+    <p class="shared-banner-cta">あなたも32問でブレンド診断をやってみよう ↓</p>
   `;
   const card = document.querySelector('#welcome .card');
   card.insertBefore(banner, card.firstChild);

@@ -18,7 +18,7 @@ const svg = `
 
   <!-- eyebrow pill -->
   <rect x="80" y="100" width="260" height="48" rx="24" fill="#f3e8ff"/>
-  <text x="210" y="132" font-family="sans-serif" font-size="22" font-weight="700" fill="#7c3aed" text-anchor="middle">✨ MBTI 割合診断</text>
+  <text x="210" y="132" font-family="sans-serif" font-size="22" font-weight="700" fill="#7c3aed" text-anchor="middle">✨ MBTI 性格ブレンド診断</text>
 
   <!-- headline -->
   <text x="80" y="260" font-family="sans-serif" font-size="72" font-weight="900" fill="#1e1533">あなたの性格は</text>
